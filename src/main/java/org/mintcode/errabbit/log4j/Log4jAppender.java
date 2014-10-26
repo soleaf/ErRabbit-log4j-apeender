@@ -1,8 +1,11 @@
 package org.mintcode.errabbit.log4j;
 
 import org.apache.log4j.AppenderSkeleton;
-import org.apache.log4j.Level;
 import org.apache.log4j.spi.LoggingEvent;
+import org.mintcode.errabbit.log4j.base.Print;
+import org.mintcode.errabbit.log4j.base.Settings;
+import org.mintcode.errabbit.log4j.base.Version;
+import org.mintcode.errabbit.log4j.send.Sender;
 
 /**
  * Log4jAppender for Error Rabbit
@@ -10,66 +13,34 @@ import org.apache.log4j.spi.LoggingEvent;
  */
 public class Log4jAppender extends AppenderSkeleton {
 
-    private String host = null;
-    private String sign = null;
-    private String printHeader = "[ErRabbit'-'] ";
-    private boolean activated = false;
-    private String version = "0.0.1";
+    private Settings settings = Settings.getInstance();
 
-    public Log4jAppender(){
+    public Log4jAppender() {
 
-        print("Initiation!");
-        print("version " + version);
-        print("host=" + host + ", sign=" + sign);
+        Version.printLogo();
+        Print.out("Initiation!");
+        Print.out("version " + Version.string + " " + (Version.stable ? "Stable" : "Unstable"));
+        Print.out("host=" + settings.getHost() + ", sign=" + settings.getSign());
 
-        if (host == null || sign == null){
-            activated = false;
-
+        // Check setting validation
+        if (settings.getHost() == null || settings.getSign() == null) {
+            //todo: Check to Sever
+            settings.setActivated(true);
+        } else {
+            settings.setActivated(false);
         }
-        else{
-            activated = true;
-        }
-    }
-
-    private void print(String message){
-        System.out.println(printHeader + message);
     }
 
     @Override
     protected void append(LoggingEvent event) {
 
-        String message = null;
-        if (event.locationInformationExists()) {
-
-            String className = event.getLocationInformation().getClassName();
-            String methodName = event.getLocationInformation().getMethodName();
-            String lineNumber = event.getLocationInformation().getLineNumber();
-//            String message = event.getMessage().toString();
-//            message = formatedMessage.toString();
-        } else {
-//            message = event.getMessage().toString();
+        if (!settings.getActivated()) {
+            Print.out(" [!ERROR] ErRabbit Not Ready. Check Server settings. or Server status.");
+            return;
         }
 
-        switch (event.getLevel().toInt()) {
-            case Level.INFO_INT:
-                //your decision
-                break;
-            case Level.DEBUG_INT:
-                //your decision
-                break;
-            case Level.ERROR_INT:
-                //your decision
-                break;
-            case Level.WARN_INT:
-                //your decision
-                break;
-            case Level.TRACE_INT:
-                //your decision
-                break;
-            default:
-                //your decision
-                break;
-        }
+        Thread t = new Thread(new Sender(event));
+        t.start();
     }
 
     @Override
@@ -81,4 +52,17 @@ public class Log4jAppender extends AppenderSkeleton {
     public boolean requiresLayout() {
         return false;
     }
+
+
+    /**
+     * Settings
+     */
+    public void setHost(String host) {
+        settings.setHost(host);
+    }
+
+    public void setSign(String sign) {
+        settings.setSign(sign);
+    }
+
 }
