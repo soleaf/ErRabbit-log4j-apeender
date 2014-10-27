@@ -17,7 +17,7 @@ public class URL {
     public static String getURL(URL_TYPE type){
         switch (type){
             case report:
-                return settings.getHost() + "/report.err";
+                return settings.getHost() + "/api/report.err";
             default:
                 return "";
         }

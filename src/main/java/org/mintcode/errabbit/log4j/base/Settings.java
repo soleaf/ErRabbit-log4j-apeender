@@ -11,7 +11,7 @@ public class Settings {
     private Boolean activated;
 
     private int failCount = 0;
-    private int failThreshold = 0;
+    private int failThreshold = 5;
 
     private final String printHeader = "[ErRabbit] ";
     private static Settings single = new Settings();

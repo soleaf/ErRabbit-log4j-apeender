@@ -2,6 +2,7 @@ package org.mintcode.errabbit.log4j.send;
 
 import org.apache.log4j.spi.LoggingEvent;
 import org.mintcode.common.conn.PostParamAndParseJson;
+import org.mintcode.errabbit.log4j.base.Print;
 import org.mintcode.errabbit.log4j.base.Settings;
 
 import java.util.HashMap;
@@ -46,7 +47,7 @@ public class Sender implements Runnable{
         // Send
         PostParamAndParseJson conn = new PostParamAndParseJson(URL.getURL(URL.URL_TYPE.report),params);
         if (!conn.request()){
-            System.out.print("Fail to send a message.");
+            Print.out("Fail to send a message.");
             settings.addFailCount();
         }
     }

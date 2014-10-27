@@ -37,7 +37,6 @@ public class ExceptionToJson {
             if (exception.getStackTrace() != null)
                 data.put(DATA_KEY_trace, gson.toJson(exception.getStackTrace()));
 
-            System.out.println(data);
             return data;
         } catch (Exception e) {
             e.printStackTrace();

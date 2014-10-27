@@ -17,6 +17,10 @@ public class Log4jAppender extends AppenderSkeleton {
 
     public Log4jAppender() {
 
+
+    }
+
+    private void checkSettings(){
         Version.printLogo();
         Print.out("Initiation!");
         Print.out("version " + Version.string + " " + (Version.stable ? "Stable" : "Unstable"));
@@ -59,10 +63,14 @@ public class Log4jAppender extends AppenderSkeleton {
      */
     public void setHost(String host) {
         settings.setHost(host);
+        if (settings.getSign() != null && settings.getSign() != null)
+            checkSettings();
     }
 
     public void setSign(String sign) {
         settings.setSign(sign);
+        if (settings.getSign() != null && settings.getSign() != null)
+            checkSettings();
     }
 
 }
