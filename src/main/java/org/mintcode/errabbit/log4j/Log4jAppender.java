@@ -5,7 +5,8 @@ import org.apache.log4j.spi.LoggingEvent;
 import org.mintcode.errabbit.log4j.base.Print;
 import org.mintcode.errabbit.log4j.base.Settings;
 import org.mintcode.errabbit.log4j.base.Version;
-import org.mintcode.errabbit.log4j.send.Sender;
+import org.mintcode.errabbit.log4j.report.InmemoryReportRepo;
+import org.mintcode.errabbit.log4j.report.ReportRepo;
 
 /**
  * Log4jAppender for Error Rabbit
@@ -14,13 +15,19 @@ import org.mintcode.errabbit.log4j.send.Sender;
 public class Log4jAppender extends AppenderSkeleton {
 
     private Settings settings = Settings.getInstance();
+    private ReportRepo reportRepo = InmemoryReportRepo.getInstance();
 
     public Log4jAppender() {
 
-
     }
 
+    /**
+     * Checking Settings
+     * - Print Information
+     * - Set Activation (by verifying settings)
+     */
     private void checkSettings(){
+
         Version.printLogo();
         Print.out("Initiation!");
         Print.out("version " + Version.string + " " + (Version.stable ? "Stable" : "Unstable"));
@@ -28,23 +35,21 @@ public class Log4jAppender extends AppenderSkeleton {
 
         // Check setting validation
         if (settings.getHost() == null || settings.getSign() == null) {
-            //todo: Check to Sever
-            settings.setActivated(true);
-        } else {
             settings.setActivated(false);
+        } else {
+            settings.setActivated(true);
         }
+
     }
 
     @Override
     protected void append(LoggingEvent event) {
 
         if (!settings.getActivated()) {
-            Print.out(" [!ERROR] ErRabbit Not Ready. Check Server settings. or Server status.");
+            Print.out(" [!ERROR] ErRabbit Couldn't run. Check Server settings. or Server status.");
             return;
         }
-
-        Thread t = new Thread(new Sender(event));
-        t.start();
+        reportRepo.addReport(event);
     }
 
     @Override

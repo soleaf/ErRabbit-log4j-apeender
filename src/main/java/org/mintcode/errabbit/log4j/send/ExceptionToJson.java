@@ -12,7 +12,7 @@ import java.util.Map;
 public class ExceptionToJson {
 
     private static final String DATA_KEY_class = "e_class";
-    private static final String DATA_KEY_message = "basic_msg";
+    private static final String DATA_KEY_message = "msg";
     private static final String DATA_KEY_cause = "e_cause";
     private static final String DATA_KEY_trace = "e_trace";
 
@@ -38,6 +38,7 @@ public class ExceptionToJson {
                 data.put(DATA_KEY_trace, gson.toJson(exception.getStackTrace()));
 
             return data;
+
         } catch (Exception e) {
             e.printStackTrace();
             return null;
