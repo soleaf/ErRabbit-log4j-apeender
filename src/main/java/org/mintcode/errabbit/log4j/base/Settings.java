@@ -9,6 +9,9 @@ public class Settings {
     private String host;
     private String sign;
     private Boolean activated;
+    private String userName;
+    private String password;
+    private String rabbitID;
 
     private int failCount = 0;
     private int failThreshold = 5;
@@ -46,6 +49,22 @@ public class Settings {
         this.activated = activated;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getPrintHeader() {
         return printHeader;
     }
@@ -60,6 +79,14 @@ public class Settings {
 
     public void setFailThreshold(int failThreshold) {
         this.failThreshold = failThreshold;
+    }
+
+    public String getRabbitID() {
+        return rabbitID;
+    }
+
+    public void setRabbitID(String rabbitID) {
+        this.rabbitID = rabbitID;
     }
 
     public void addFailCount(){

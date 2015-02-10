@@ -5,8 +5,10 @@ import org.apache.log4j.spi.LoggingEvent;
 import org.mintcode.errabbit.log4j.base.Print;
 import org.mintcode.errabbit.log4j.base.Settings;
 import org.mintcode.errabbit.log4j.base.Version;
-import org.mintcode.errabbit.log4j.report.InmemoryReportRepo;
-import org.mintcode.errabbit.log4j.report.ReportRepo;
+import org.mintcode.errabbit.log4j.send.ActiveMQSender;
+import org.mintcode.errabbit.model.Report;
+
+import javax.jms.JMSException;
 
 /**
  * Log4jAppender for Error Rabbit
@@ -15,7 +17,7 @@ import org.mintcode.errabbit.log4j.report.ReportRepo;
 public class Log4jAppender extends AppenderSkeleton {
 
     private Settings settings = Settings.getInstance();
-    private ReportRepo reportRepo = InmemoryReportRepo.getInstance();
+    private ActiveMQSender sender = ActiveMQSender.getInstance();
 
     public Log4jAppender() {
 
@@ -28,28 +30,34 @@ public class Log4jAppender extends AppenderSkeleton {
      */
     private void checkSettings(){
 
+        if (settings.getHost() == null || settings.getUserName() == null || settings.getPassword() == null
+                || settings.getRabbitID() == null){
+            settings.setActivated(false);
+            return;
+        }
+
         Version.printLogo();
         Print.out("Initiation!");
         Print.out("version " + Version.string + " " + (Version.stable ? "Stable" : "Unstable"));
-        Print.out("host=" + settings.getHost() + ", sign=" + settings.getSign());
+        Print.out("host=" + settings.getHost() + ", userName=" + settings.getUserName());
 
         // Check setting validation
-        if (settings.getHost() == null || settings.getSign() == null) {
-            settings.setActivated(false);
-        } else {
+        if (sender.connect(settings.getHost(), settings.getUserName(), settings.getPassword(), settings.getRabbitID())){
             settings.setActivated(true);
         }
-
+        else{
+            Print.out(" [!ERROR] ErRabbit Couldn't run. Check Server settings. or Server status.");
+        }
     }
 
     @Override
     protected void append(LoggingEvent event) {
 
-        if (!settings.getActivated()) {
-            Print.out(" [!ERROR] ErRabbit Couldn't run. Check Server settings. or Server status.");
+        if (settings.getActivated() == null || !settings.getActivated()) {
             return;
         }
-        reportRepo.addReport(event);
+        sender.send(event);
+
     }
 
     @Override
@@ -68,14 +76,31 @@ public class Log4jAppender extends AppenderSkeleton {
      */
     public void setHost(String host) {
         settings.setHost(host);
-        if (settings.getSign() != null && settings.getSign() != null)
-            checkSettings();
+        checkSettings();
     }
 
-    public void setSign(String sign) {
-        settings.setSign(sign);
-        if (settings.getSign() != null && settings.getSign() != null)
-            checkSettings();
+    public void setUserName(String userName){
+        settings.setUserName(userName);
+        checkSettings();
     }
 
+    public void setPassword(String password){
+        settings.setPassword(password);
+        checkSettings();
+    }
+
+    public void setRabbitID(String rabbitID){
+        settings.setRabbitID(rabbitID);
+        checkSettings();
+    }
+
+    @Override
+    public void finalize() {
+        super.finalize();
+        try {
+            sender.close();
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
+    }
 }

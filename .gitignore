@@ -1,8 +1,11 @@
 target
 garget/*
-
 lib/*
 lib
-
 .idea
 .iml
+com.sweettracker.errabbit.log4j.iml
+ErRabbit_log4jappender.iml
+ErRabbit_log4jappender.ipr
+ErRabbit_log4jappender.iws
+log4j-apeender.iml
