@@ -2,6 +2,7 @@ package org.mintcode.errabbit.log4j.send;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.log4j.spi.LoggingEvent;
+import org.mintcode.errabbit.log4j.base.Print;
 import org.mintcode.errabbit.model.Report;
 
 import javax.jms.*;
@@ -39,11 +40,9 @@ public class ActiveMQSender {
         this.rabbitID = rabbitID;
 
         if (getSession()){
-            System.out.println("Connection Success");
             return true;
         }
         else{
-            System.out.println("Connection Fail");
             return false;
         }
 
@@ -66,16 +65,16 @@ public class ActiveMQSender {
             producer = session.createProducer(destination);
             producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
+            Print.out("Connection Success");
             return true;
 
         } catch (JMSException e) {
-            e.printStackTrace();
-
+            Print.out("Connection Fail >> " + e.getMessage());
             return false;
         }
     }
 
-    public  void send(LoggingEvent loggingEvent){
+    public void send(LoggingEvent loggingEvent){
         try {
             ObjectMessage message = session.createObjectMessage(new Report(rabbitID, loggingEvent));
             send(message);
@@ -86,22 +85,18 @@ public class ActiveMQSender {
 
     protected void send(ObjectMessage message) {
         try {
-
-            // Tell the producer to send the message
-            System.out.println("Sent message: " + message.hashCode() + " : " + Thread.currentThread().getName());
             producer.send(message);
-
         } catch (JMSException e) {
             e.printStackTrace();
+            Print.out("Couldn't send a report");
         }
-
     }
 
 
     @Override
     protected void finalize() throws Throwable {
-        super.finalize();
         close();
+        super.finalize();
     }
 
     public void close() throws JMSException {
@@ -109,7 +104,6 @@ public class ActiveMQSender {
         producer.close();
         session.close();
         connection.close();
-
     }
 
 }

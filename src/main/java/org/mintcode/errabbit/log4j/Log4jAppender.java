@@ -18,6 +18,7 @@ public class Log4jAppender extends AppenderSkeleton {
 
     private Settings settings = Settings.getInstance();
     private ActiveMQSender sender = ActiveMQSender.getInstance();
+    private long retryInterval = 1000 * 60 * 10;
 
     public Log4jAppender() {
 
@@ -42,11 +43,30 @@ public class Log4jAppender extends AppenderSkeleton {
         Print.out("host=" + settings.getHost() + ", userName=" + settings.getUserName());
 
         // Check setting validation
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while(!connect()) {
+                        Print.out(String.format("Retry After %d Min.", retryInterval / 1000/ 60));
+                        Thread.sleep(retryInterval);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        t.start();
+
+    }
+
+    private boolean connect(){
         if (sender.connect(settings.getHost(), settings.getUserName(), settings.getPassword(), settings.getRabbitID())){
             settings.setActivated(true);
+            return true;
         }
         else{
-            Print.out(" [!ERROR] ErRabbit Couldn't run. Check Server settings. or Server status.");
+            return false;
         }
     }
 
