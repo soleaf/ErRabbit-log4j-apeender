@@ -5,7 +5,7 @@ package org.mintcode.errabbit.log4j.base;
  */
 public class Version {
 
-    public final static String string = "0.0.1";
+    public final static String string = "0.1.0";
     public final static boolean stable = false;
 
     public static void printLogo(){
