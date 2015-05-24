@@ -6,7 +6,6 @@ import org.mintcode.errabbit.log4j.base.Print;
 import org.mintcode.errabbit.log4j.base.Settings;
 import org.mintcode.errabbit.log4j.base.Version;
 import org.mintcode.errabbit.log4j.send.ActiveMQSender;
-import org.mintcode.errabbit.model.Report;
 
 import javax.jms.JMSException;
 
@@ -31,33 +30,14 @@ public class Log4jAppender extends AppenderSkeleton {
      */
     private void checkSettings(){
 
-        if (settings.getHost() == null || settings.getUserName() == null || settings.getPassword() == null
-                || settings.getRabbitID() == null){
+        if (settings.getHost() == null|| settings.getRabbitID() == null){
             settings.setActivated(false);
             return;
         }
-
-        Version.printLogo();
         Print.out("Initiation!");
         Print.out("version " + Version.string + " " + (Version.stable ? "Stable" : "Unstable"));
-        Print.out("host=" + settings.getHost() + ", userName=" + settings.getUserName());
-
-        // Check setting validation
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while(!connect()) {
-                        Print.out(String.format("Retry After %d Min.", retryInterval / 1000/ 60));
-                        Thread.sleep(retryInterval);
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        t.start();
-
+        Print.out("host=" + settings.getHost());
+        connect();
     }
 
     private boolean connect(){
@@ -80,16 +60,17 @@ public class Log4jAppender extends AppenderSkeleton {
 
     }
 
-    @Override
     public void close() {
-
+        try {
+            sender.close();
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
     }
 
-    @Override
     public boolean requiresLayout() {
         return false;
     }
-
 
     /**
      * Settings

@@ -3,7 +3,7 @@ package org.mintcode.errabbit.log4j.send;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.log4j.spi.LoggingEvent;
 import org.mintcode.errabbit.log4j.base.Print;
-import org.mintcode.errabbit.model.Report;
+import org.mintcode.errabbit.model.ErrLoggingEvent;
 
 import javax.jms.*;
 
@@ -19,7 +19,7 @@ public class ActiveMQSender {
     String userName;
     String password;
     String uri;
-    String queueName = "errabbit.report";
+    String queueName;
     String rabbitID;
 
     Connection connection = null;
@@ -38,8 +38,10 @@ public class ActiveMQSender {
         this.userName = userName;
         this.password = password;
         this.rabbitID = rabbitID;
+        this.queueName = "errabbit.report." + rabbitID;
 
         if (getSession()){
+            Print.out("Connection Success QueueName:" + queueName);
             return true;
         }
         else{
@@ -64,8 +66,6 @@ public class ActiveMQSender {
             // Create a MessageProducer from the Session to the Topic or Queue
             producer = session.createProducer(destination);
             producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-
-            Print.out("Connection Success");
             return true;
 
         } catch (JMSException e) {
@@ -76,7 +76,8 @@ public class ActiveMQSender {
 
     public void send(LoggingEvent loggingEvent){
         try {
-            ObjectMessage message = session.createObjectMessage(new Report(rabbitID, loggingEvent));
+            ErrLoggingEvent errLoggingEvent = ErrLoggingEvent.fromLoggingEvent(loggingEvent);
+            ObjectMessage message = session.createObjectMessage(errLoggingEvent);
             send(message);
         } catch (JMSException e) {
             e.printStackTrace();
@@ -95,6 +96,7 @@ public class ActiveMQSender {
 
     @Override
     protected void finalize() throws Throwable {
+        Print.out("Finalize");
         close();
         super.finalize();
     }
