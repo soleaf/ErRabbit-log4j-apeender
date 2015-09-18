@@ -1,8 +1,9 @@
 # ErRabbit-log4j-apeender
 
-Log4j Custom appender for ErRabbit
+Log4j 1.x Custom appender for ErRabbit
 ErRabbit is visual remote logging system using Log4j. 
 You cant track all your server applications on ErRabbit just add log4j-appender.
+(log4j2.x is not required this custom appender, check out below ErRabbit link)
 
 ErRabbit URL : https://github.com/soleaf/ErRabbit
 
