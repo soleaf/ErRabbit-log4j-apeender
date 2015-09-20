@@ -17,7 +17,6 @@ public class Log4jAppender extends AppenderSkeleton {
 
     private Settings settings = Settings.getInstance();
     private ActiveMQSender sender = ActiveMQSender.getInstance();
-    private long retryInterval = 1000 * 60 * 10;
 
     public Log4jAppender() {
 
@@ -35,11 +34,15 @@ public class Log4jAppender extends AppenderSkeleton {
             return;
         }
         Print.out("Initiation!");
-        Print.out("version " + Version.string + " " + (Version.stable ? "Stable" : "Unstable"));
+        Print.out("version " + Version.string);
         Print.out("host=" + settings.getHost());
         connect();
     }
 
+    /**
+     * Connect to active mq
+     * @return
+     */
     private boolean connect(){
         if (sender.connect(settings.getHost(), settings.getUserName(), settings.getPassword(), settings.getRabbitID())){
             settings.setActivated(true);

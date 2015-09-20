@@ -9,6 +9,7 @@ import javax.jms.*;
 
 
 /**
+ * Send to active mq
  * Created by soleaf on 2015. 2. 10..
  */
 public class ActiveMQSender {

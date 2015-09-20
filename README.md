@@ -7,9 +7,20 @@ You cant track all your server applications on ErRabbit just add log4j-appender.
 
 ErRabbit URL : https://github.com/soleaf/ErRabbit
 
+#### Maven
+
+```xml
+<dependency>
+    <groupId>org.mintcode.errabbit</groupId>
+    <artifactId>log4j-apeender</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
 #### Setup log4j.xml
 
 1. Declare 'errabbit' appender to `log4j.xml` with your ActiveMQ URL, userName, password, rabbitID
+
  
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>

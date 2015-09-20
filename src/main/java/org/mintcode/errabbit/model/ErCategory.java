@@ -12,7 +12,6 @@ public class ErCategory implements Serializable{
     private static final long serialVersionUID = 1L;
 
     private String name;
-//    private ErCategory parent;
     private ErLevel level;
 
     public ErCategory(){
@@ -27,7 +26,6 @@ public class ErCategory implements Serializable{
 
         ErCategory erCategory = new ErCategory();
         erCategory.setName(category.getName());
-//        erCategory.setParent(ErCategory.fromCategory(category.getParent()));
         erCategory.setLevel(ErLevel.fromLevel(category.getLevel()));
 
         return erCategory;
@@ -40,14 +38,6 @@ public class ErCategory implements Serializable{
     public void setName(String name) {
         this.name = name;
     }
-
-//    public ErCategory getParent() {
-//        return parent;
-//    }
-//
-//    public void setParent(ErCategory parent) {
-//        this.parent = parent;
-//    }
 
     public ErLevel getLevel() {
         return level;
