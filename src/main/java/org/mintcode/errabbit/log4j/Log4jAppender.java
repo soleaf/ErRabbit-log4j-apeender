@@ -53,6 +53,10 @@ public class Log4jAppender extends AppenderSkeleton {
         }
     }
 
+    /**
+     * Append event
+     * @param event
+     */
     @Override
     protected void append(LoggingEvent event) {
 
@@ -63,6 +67,9 @@ public class Log4jAppender extends AppenderSkeleton {
 
     }
 
+    /**
+     * Close
+     */
     public void close() {
         try {
             sender.close();

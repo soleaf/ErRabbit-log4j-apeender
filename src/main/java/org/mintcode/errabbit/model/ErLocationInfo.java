@@ -3,6 +3,7 @@ package org.mintcode.errabbit.model;
 import java.io.Serializable;
 
 /**
+ * Model for org.apache.log4j.spi.LocationInfo
  * Created by soleaf on 2/21/15.
  */
 public class ErLocationInfo implements Serializable {
@@ -13,6 +14,11 @@ public class ErLocationInfo implements Serializable {
 
     }
 
+    /**
+     * Generate from org.apache.log4j.spi.LocationInfo
+     * @param locationInfo
+     * @return
+     */
     public static ErLocationInfo fromLocationInfo(org.apache.log4j.spi.LocationInfo locationInfo) {
 
         ErLocationInfo erLocationInfo = new ErLocationInfo();

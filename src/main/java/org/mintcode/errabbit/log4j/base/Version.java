@@ -1,6 +1,7 @@
 package org.mintcode.errabbit.log4j.base;
 
 /**
+ * Version Banner
  * Created by soleaf on 2014. 10. 26..
  */
 public class Version {

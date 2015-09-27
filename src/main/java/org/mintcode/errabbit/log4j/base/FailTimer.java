@@ -1,6 +1,8 @@
 package org.mintcode.errabbit.log4j.base;
 
 /**
+ * Fail timer
+ * To retry connect to active mq
  * Created by soleaf on 2014. 10. 26..
  */
 public class FailTimer implements Runnable{

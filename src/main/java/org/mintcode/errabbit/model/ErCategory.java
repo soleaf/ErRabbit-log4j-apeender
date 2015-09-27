@@ -5,6 +5,7 @@ import org.apache.log4j.Category;
 import java.io.Serializable;
 
 /**
+ * Model for org.apache.log4j.Category
  * Created by soleaf on 2/21/15.
  */
 public class ErCategory implements Serializable{
@@ -18,6 +19,11 @@ public class ErCategory implements Serializable{
 
     }
 
+    /**
+     * Generate from org.apache.log4j.Category
+     * @param category
+     * @return
+     */
     public static ErCategory fromCategory(Category category){
 
         if (category == null){

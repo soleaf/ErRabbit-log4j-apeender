@@ -6,6 +6,7 @@ import org.apache.log4j.Level;
 import java.io.Serializable;
 
 /**
+ * Model for org.apache.log4j.Level
  * Created by soleaf on 2/21/15.
  */
 public class ErLevel implements Serializable {
@@ -16,6 +17,12 @@ public class ErLevel implements Serializable {
     private String levelStr;
 
     public ErLevel(){}
+
+    /***
+     * Generate from org.apache.log4j.Level
+     * @param level
+     * @return
+     */
     public static ErLevel fromLevel(Level level){
 
         if (level == null){

@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 
 /**
+ * Model for org.apache.log4j.spi.ThrowableInformation
  * Created by soleaf on 2/21/15.
  */
 public class ErThrowableInformation implements Serializable {
@@ -20,6 +21,11 @@ public class ErThrowableInformation implements Serializable {
     public ErThrowableInformation() {
     }
 
+    /**
+     * Generate from org.apache.log4j.spi.TrowableInformation
+     * @param tw
+     * @return
+     */
     public static ErThrowableInformation fromThrowableInformation(ThrowableInformation tw) {
 
         ErThrowableInformation ert = new ErThrowableInformation();

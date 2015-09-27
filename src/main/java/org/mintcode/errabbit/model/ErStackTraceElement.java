@@ -2,6 +2,7 @@ package org.mintcode.errabbit.model;
 import java.io.Serializable;
 
 /**
+ * Model for java.lang.StackTraceElement
  * Created by soleaf on 2/21/15.
  */
 public class ErStackTraceElement implements Serializable{
@@ -15,6 +16,11 @@ public class ErStackTraceElement implements Serializable{
 
     public ErStackTraceElement(){}
 
+    /**
+     * Generate from java.lang.StackTraceElement
+     * @param element
+     * @return
+     */
     public static ErStackTraceElement fromStackTraceElement(StackTraceElement element){
         ErStackTraceElement erl = new ErStackTraceElement();
         erl.setDeclaringClass(element.getClassName());

@@ -33,6 +33,14 @@ public class ActiveMQSender {
         return single;
     }
 
+    /**
+     * Connect to activeMQ
+     * @param uri
+     * @param userName
+     * @param password
+     * @param rabbitID
+     * @return
+     */
     public boolean connect(String uri, String userName, String password, String rabbitID){
 
         this.uri = uri;
@@ -51,6 +59,10 @@ public class ActiveMQSender {
 
     }
 
+    /**
+     * Get Session
+     * @return
+     */
     public boolean getSession() {
 
         try {
@@ -75,6 +87,10 @@ public class ActiveMQSender {
         }
     }
 
+    /**
+     * Convert and send loggingEvent
+     * @param loggingEvent
+     */
     public void send(LoggingEvent loggingEvent){
         try {
             ErrLoggingEvent errLoggingEvent = ErrLoggingEvent.fromLoggingEvent(loggingEvent);
@@ -85,6 +101,10 @@ public class ActiveMQSender {
         }
     }
 
+    /**
+     * Convert and send message
+     * @param message
+     */
     protected void send(ObjectMessage message) {
         try {
             producer.send(message);

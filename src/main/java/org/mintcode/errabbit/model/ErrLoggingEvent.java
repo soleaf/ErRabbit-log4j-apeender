@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * Model for org.apache.log4j.spi.LoggingEvent
  * Created by soleaf on 2/21/15.
  */
 public class ErrLoggingEvent implements Serializable{
@@ -15,6 +16,11 @@ public class ErrLoggingEvent implements Serializable{
 
     }
 
+    /**
+     * Generate from org.apache.log4j.spi.LoggingEvent
+     * @param loggingEvent
+     * @return
+     */
     public static ErrLoggingEvent fromLoggingEvent(LoggingEvent loggingEvent){
 
         ErrLoggingEvent erLoggingEvent = new ErrLoggingEvent();
